@@ -37,7 +37,7 @@
     <workgroup>Internet Engineering Task Force</workgroup>
 
     <abstract>
-			<t>This document specifies LDAP Control which extends persist stage of
+			<t>This document specifies LDAP Control which extends the persist stage of the
 				Content Synchronization Operation with information about LDAP
 				transaction boundaries. This information can be used to support
 				application-level transactions or for application-level optimizations.
@@ -47,22 +47,22 @@
 
   <middle>
     <section title="Introduction">
-			<t><xref target="RFC4533">LDAP Content Synchronization Operation</xref>
+			<t><xref target="RFC4533">The LDAP Content Synchronization Operation</xref>
 				and <xref target="RFC5805">LDAP Transactions</xref>
-				are not integrated which makes Content Synchronization Operation less
+				are not integrated, which makes the Content Synchronization Operation less
 				useful.</t>
 
-			<t>The client using Content Synchronization Operation has no information
-				which changes were part of a single transaction. As a result,
+			<t>The client using the Content Synchronization Operation has no information
+				of which changes were part of a single transaction. As a result,
 				the client cannot replicate transaction semantics reliably, especially
-				when a connection to LDAP server is interrupted in the middle of
-				persist phase of Content Synchronization Operation.</t>
+				when a connection to an LDAP server is interrupted in the middle of
+				the persist stage of the Content Synchronization Operation.</t>
 
-			<t>Some clients could use the information where LDAP transaction
+			<t>Some clients could use the information where an LDAP transaction
 				started and ended for transactions at application level to guarantee
 				consistency of application data. Altenatively, some applications can
 				use transaction boundaries for optimizations when further processing
-				of the data is triggered by end of transaction. This might allow
+				of the data is triggered by the end of a transaction. This might allow
 				the application to save some overhead by processing changes in groups.
 			</t>
 
@@ -80,7 +80,7 @@
     </section>
 
 		<section
-			title="Elements of an LDAP Content Synchronization with Transactions">
+			title="Elements of the LDAP Content Synchronization with Transactions">
 			<t>Existing protocol messages and semantics defined by
 				<xref target="RFC4533"/> are not changed. The protocol flow is only
 				extended with	Transaction Notification Control, Start, and
@@ -98,7 +98,7 @@
 				<t>The Start Transaction Notification message is an
 					IntermediateResponse <xref target="RFC4511"/>
 					where the responseName is "TBD2"
-					and the responseValue is an transaction identifier as defined in
+					and the responseValue is a transaction identifier as defined in
 					<xref target="RFC5805"/>.
 				</t>
 			</section>
@@ -113,68 +113,67 @@
 		</section>
 
 
-		<section title="Interaction with Content Synchronization Operation">
+		<section title="Interaction with the Content Synchronization Operation">
 			<t>The client requests information about LDAP Transaction to be added
-				to Content Synchronization Operation by sending
+				to the Content Synchronization Operation by sending
 				Transaction Notification Control along with a SearchRequest Message
-				which contains a Sync Request Control <xref target="RFC4533"/>.
+				that contains a Sync Request Control <xref target="RFC4533"/>.
 				All attempts to use Transaction Notification Control without
-				Sync Request Control MUST be denied with unwillingToPerform
+				Sync Request Control MUST be denied with the unwillingToPerform
 				<xref target="RFC4511"/> result code.
 			</t>
 
 			<t>Please note that <xref target="RFC5805"/> defined that LDAP
 				Transactions have atomic, consistency, isolation, durability (ACID)
-				properties without further specification of "isolation" level.
-				This extension assumes that isolation property guarantees that
+				properties without further specification of the "isolation" level.
+				This extension assumes that an isolation property guarantees that
 				uncommited changes are generaly not visible to LDAP clients and thus
-				not returned in Content Synchronization Operation results.</t>
+				not returned in the Content Synchronization Operation results.</t>
 
 			<section title="Refresh stage">
-				<t>The Refresh stage of the Content Synchronization Operation
-					is unaffected by Transaction Notification Control. The control does
-					not affect neither Content Determination or protocol messages sent
-					during the Refresh stage.</t>
+				<t>The refresh stage of the Content Synchronization Operation
+					is unaffected by Transaction Notification Control. The control affects neither Content Determination nor protocol messages sent
+					during the refresh stage.</t>
 
-				<t>Transaction-aware clients MUST treat the refresh stage as single
-					transaction. Messages which mark end of the refresh stage are defined
+				<t>Transaction-aware clients MUST treat the refresh stage as a single
+					transaction. Messages that mark end of the refresh stage are defined
 					in <xref target="RFC4533"/>.</t>
 			</section>
 
 			<section title="Persist stage">
 				<t>Existing protocol messages and semantics defined by
 					<xref target="RFC4533"/> are not changed. The protocol flow
-					in the persist phase is only extended with
+					in the persist stage is extended only with
 					Start and End Transaction Notification Messages.</t>
 
-				<t>Start Transaction Notification Message MUST be sent to client when
+				<t>A Start Transaction Notification Message MUST be sent to a client when
 					a	transaction is successfully commited but before any of the changes
 					contained in the transaction are sent to the client. The message
 					MUST contain transaction identifier which was used to identify
-					the transaction in the protocol exchange with client which did
+					the transaction in the protocol exchange with the client that did
 					modifications to the data as defined in	<xref target="RFC5805"/>.</t>
 
-				<t>TODO: Is it a good idea? Should we rather define Ignore-own-writes control?</t>
+				<t>TODO: Is it a good idea? Should we rather define an Ignore-own-writes control?</t>
 
 				<t>The transaction identifier allows the client to distinguish
 					its own transactions from other's transactions done on the same
-					server and to optimize client's behavior.
+					server and to optimize the client's behavior.
 					<xref target="RFC5805"/> section 5 defines transaction identifiers
-					as specific to a particular LDAP association so clients
-					have to take into account that transaction identifier will not match
-					if changes are done on a different server than
+					as specific to a particular LDAP association, so clients
+					have to take into account that a transaction identifier will not match
+					if changes are done on a different server than the
 					Content Synchronization Operation.</t>
 
 				<t>The Start Transaction Notification Message MUST be followed by
-					all Change notification messages as defined in Persist stage of
-					<xref target="RFC4533"/>. Server MUST NOT interleave changes made in
+					all Change notification messages as defined in the persist stage of
+					<xref target="RFC4533"/>. A server MUST NOT interleave changes made in
 					multiple transactions	to ensure that Start and End messages
 					unambiguously identify one transaction.</t>
 
-				<t>End Transaction Notification Message MUST be sent right after all
+				<t>An End Transaction Notification Message MUST be sent right after all
 					Change notifications for given transaction were sent to the client.
 					This message signalizes to the client that the transaction marked
-					by Start Transaction Notification Message is complete
+					by the Start Transaction Notification Message is complete
 					and all changes can be commited.</t>
 			</section>
 		</section>
@@ -186,7 +185,7 @@
     <section title="Security Considerations">
 			<t>This document merely adds information about transaction boundaries
 				to the existing Content Synchronization Operation. The only potential
-				information leak is transaction identifier returned in Start
+				information leak is a transaction identifier returned in a Start
 				Transaction Notification Message. This is believed not to add any
 				security risk.</t>
     </section>

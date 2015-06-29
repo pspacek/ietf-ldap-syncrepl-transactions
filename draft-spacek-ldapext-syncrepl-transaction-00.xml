@@ -16,10 +16,10 @@
 <?rfc autobreaks="yes"?>
 <?rfc docmapping="yes"?>
 
-<rfc category="std" docName="draft-spacek-dnsop-update-clarif-00"
+<rfc category="std" docName="draft-spacek-ldapext-syncrepl-transaction-00"
       ipr="trust200902">
   <front>
-    <title abbrev="LDAP Content Synchronization with Transactions">
+    <title abbrev="LDAP Content Synchronization &amp; Transactions">
 			The Lightweight Directory Access Protocol (LDAP)
 			Content Synchronization Operation
 			with Transactions

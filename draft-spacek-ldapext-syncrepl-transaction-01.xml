@@ -16,7 +16,7 @@
 <?rfc autobreaks="yes"?>
 <?rfc docmapping="yes"?>
 
-<rfc category="std" docName="draft-spacek-ldapext-syncrepl-transaction-00"
+<rfc category="std" docName="draft-spacek-ldapext-syncrepl-transaction-01"
       ipr="trust200902">
   <front>
     <title abbrev="LDAP Content Synchronization &amp; Transactions">
@@ -30,7 +30,7 @@
       <address><email>pspacek@redhat.com</email></address>
     </author>
 
-    <date month="June" year="2015" />
+    <date month="November" year="2015" />
 
     <area>Applications Area</area>
 
@@ -98,8 +98,7 @@
 				<t>The Start Transaction Notification message is an
 					IntermediateResponse <xref target="RFC4511"/>
 					where the responseName is "TBD2"
-					and the responseValue is a transaction identifier as defined in
-					<xref target="RFC5805"/>.
+					and the responseValue is absent.
 				</t>
 			</section>
 
@@ -123,6 +122,7 @@
 				<xref target="RFC4511"/> result code.
 			</t>
 
+			<t>TODO: THIS SHOULD BE CLARIFIED BY FURTHER UPDATES TO TRANSACTION RFCs</t>
 			<t>Please note that <xref target="RFC5805"/> defined that LDAP
 				Transactions have atomic, consistency, isolation, durability (ACID)
 				properties without further specification of the "isolation" level.
@@ -147,30 +147,16 @@
 					Start and End Transaction Notification Messages.</t>
 
 				<t>A Start Transaction Notification Message MUST be sent to a client when
-					a	transaction is successfully commited but before any of the changes
-					contained in the transaction are sent to the client. The message
-					MUST contain transaction identifier which was used to identify
-					the transaction in the protocol exchange with the client that did
-					modifications to the data as defined in	<xref target="RFC5805"/>.</t>
-
-				<t>TODO: Is it a good idea? Should we rather define an Ignore-own-writes control?</t>
-
-				<t>The transaction identifier allows the client to distinguish
-					its own transactions from other's transactions done on the same
-					server and to optimize the client's behavior.
-					<xref target="RFC5805"/> section 5 defines transaction identifiers
-					as specific to a particular LDAP association, so clients
-					have to take into account that a transaction identifier will not match
-					if changes are done on a different server than the
-					Content Synchronization Operation.</t>
+					a transaction is successfully commited but before any of the changes
+					contained in the transaction are sent to the client.</t>
 
 				<t>The Start Transaction Notification Message MUST be followed by
 					all Change notification messages as defined in the persist stage of
 					<xref target="RFC4533"/>. A server MUST NOT interleave changes made in
-					multiple transactions	to ensure that Start and End messages
+					multiple transactions to ensure that Start and End messages
 					unambiguously identify one transaction.</t>
 
-				<t>An End Transaction Notification Message MUST be sent right after all
+				<t>An End Transaction Notification Message MUST be sent immediatelly after all
 					Change notifications for given transaction were sent to the client.
 					This message signalizes to the client that the transaction marked
 					by the Start Transaction Notification Message is complete
@@ -184,10 +170,8 @@
 
     <section title="Security Considerations">
 			<t>This document merely adds information about transaction boundaries
-				to the existing Content Synchronization Operation. The only potential
-				information leak is a transaction identifier returned in a Start
-				Transaction Notification Message. This is believed not to add any
-				security risk.</t>
+				to the existing Content Synchronization Operation.
+				This is believed not to add any security risk.</t>
     </section>
 
   </middle>
